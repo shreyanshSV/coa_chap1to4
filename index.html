@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>COA Complete Study Guide — CT403-N</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
@@ -84,6 +84,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
 .stat-num{font-family:var(--head);font-size:28px;font-weight:800;color:var(--accent);}
 .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);}
 
+.syllabus-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
 /* TOPIC CHIPS */
 .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
 .chip{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--accent);font-size:11px;padding:4px 12px;border-radius:20px;font-family:var(--mono);cursor:pointer;transition:all .2s;}
@@ -121,12 +123,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
 .ns-body strong{color:var(--text);font-weight:600;}
 
 /* DIAGRAM */
-.diagram-wrap{background:#0a1628;border:1px solid var(--border);border-radius:10px;padding:24px;margin:20px 0;overflow-x:auto;text-align:center;}
-.diagram-wrap svg{max-width:100%;height:auto;}
-.diagram-label{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;margin-top:10px;}
+.diagram-wrap{display:block;width:100%;clear:both;background:#0a1628;border:1px solid var(--border);border-radius:10px;padding:24px;margin:20px 0;overflow-x:auto;overflow-y:hidden;text-align:center;-webkit-overflow-scrolling:touch;contain:layout;}
+.diagram-wrap svg{max-width:100%;height:auto;display:block;margin:0 auto;min-width:0;vertical-align:top;}
+.diagram-label{font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;margin-top:10px;display:block;}
 
 /* TABLE */
-.tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:16px 0;}
+.tbl{width:100%;min-width:320px;border-collapse:collapse;margin:0;font-size:13px;}
 .tbl th{background:var(--surface2);color:var(--accent);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;text-align:left;border:1px solid var(--border);}
 .tbl td{padding:10px 14px;border:1px solid var(--border);color:var(--text2);vertical-align:top;}
 .tbl tr:hover td{background:var(--surface2);}
@@ -159,19 +162,43 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
 .checklist li.done span{text-decoration:line-through;color:var(--text3);}
 
 /* MOBILE */
-.hamburger{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;min-height:44px;min-width:44px;-webkit-tap-highlight-color:transparent;}
 @media(max-width:768px){
-  #sidebar{transform:translateX(-100%);}
-  #sidebar.open{transform:translateX(0);}
+  #sidebar{transform:translateX(-100%);width:min(280px,85vw);box-shadow:none;}
+  #sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.4);}
+  #sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;}
+  #sidebar.open ~ #sidebar-overlay{display:block;opacity:1;pointer-events:auto;}
   #main{margin-left:0;}
-  .top-bar{padding:12px 20px;}
-  .page{padding:20px;}
-  .hamburger{display:block;}
-  .hero h1{font-size:26px;}
+  .top-bar{padding:12px 16px;flex-wrap:wrap;gap:8px;}
+  .top-bar h2{font-size:14px;}
+  .badge{font-size:9px;padding:4px 6px;}
+  .page{padding:16px;}
+  .hamburger{display:flex;align-items:center;justify-content:center;}
+  .hero{padding:28px 20px;margin-bottom:24px;}
+  .hero h1{font-size:22px;line-height:1.2;}
+  .hero p{font-size:14px;}
+  .stat-row{gap:12px;}
+  .stat{padding:12px 16px;}
+  .stat-num{font-size:22px;}
+  .syllabus-grid{grid-template-columns:1fr;}
+  .card{padding:20px;}
+  .card-title{font-size:16px;flex-wrap:wrap;}
+  .ns-title{font-size:18px;}
+  .ns-body{font-size:14px;}
+  .pyq-header{flex-wrap:wrap;padding:14px 16px;}
+  .pyq-q-text{font-size:13px;}
+  .pyq-body{padding:16px;}
+  .nav-item{min-height:44px;padding:12px 20px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent;}
+  .diagram-wrap{padding:16px;margin:16px 0;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:20px;}
+  .page{padding:12px;}
+  .card{padding:16px;}
 }
 
 /* SCROLL indicator */
-.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .1s;}
+.scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:999;transition:width .1s;}
 </style>
 </head>
 <body>
@@ -201,6 +228,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
   <span class="nav-section">Tools</span>
   <button class="nav-item" onclick="showPage('checklist')">☑️ Exam Prep Checklist</button>
 </nav>
+<div id="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open')" aria-hidden="true"></div>
 
 <div id="main">
   <div class="top-bar">
@@ -227,7 +255,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
     <div class="card">
       <div class="card-title">🎯 Mid-Sem Syllabus (Feb-Mar 2026)</div>
       <div class="card-sub">CT403-N · Max Marks: 30 · Time: 1hr 30min</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="syllabus-grid">
         <div style="background:var(--surface2);border-radius:8px;padding:16px;">
           <div style="color:var(--accent);font-family:var(--mono);font-size:11px;margin-bottom:10px;">CHAPTER 1</div>
           <strong>Register Transfer & Micro-operations</strong>
@@ -262,7 +290,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
     <div class="card">
       <div class="card-title">🔥 Most Repeated PYQ Topics</div>
       <div class="card-sub">Asked in 3+ previous exams — MUST prepare</div>
-      <table class="tbl">
+      <div class="tbl-wrap"><table class="tbl">
         <tr><th>Topic</th><th>Chapter</th><th>Times Asked</th><th>Priority</th></tr>
         <tr><td>Assembler — First Pass with Flowchart</td><td>Ch.3</td><td>7+ times</td><td><span class="badge">🔥 Critical</span></td></tr>
         <tr><td>Instruction Cycle Flowchart</td><td>Ch.2</td><td>7+ times</td><td><span class="badge">🔥 Critical</span></td></tr>
@@ -274,7 +302,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
         <tr><td>Interrupt Cycle Flowchart</td><td>Ch.2</td><td>4+ times</td><td><span class="badge gold">High</span></td></tr>
         <tr><td>Accumulator Logic Design</td><td>Ch.2</td><td>4+ times</td><td><span class="badge green">Medium</span></td></tr>
         <tr><td>Register Stack (64-word)</td><td>Ch.4</td><td>4+ times</td><td><span class="badge green">Medium</span></td></tr>
-      </table>
+      </table></div>
     </div>
   </div>
 
@@ -390,14 +418,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
         <div class="card-title">1.4 Arithmetic Micro-operations</div>
         <div class="ns-body">
           <p>These are basic math operations performed on binary numbers stored in registers.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Operation</th><th>RTL Notation</th><th>Meaning</th></tr>
             <tr><td>Add</td><td>R0 ← R1 + R2</td><td>Add contents of R1 and R2</td></tr>
             <tr><td>Subtract</td><td>R0 ← R1 + R2' + 1</td><td>Using 2's complement subtraction</td></tr>
             <tr><td>Increment</td><td>R1 ← R1 + 1</td><td>Add 1 to R1</td></tr>
             <tr><td>Decrement</td><td>R1 ← R1 - 1</td><td>Subtract 1 from R1</td></tr>
             <tr><td>Negate</td><td>R1 ← R1' + 1</td><td>2's complement of R1</td></tr>
-          </table>
+          </table></div>
 
           <h4>Binary Adder-Subtractor Circuit</h4>
           <p>A 4-bit adder-subtractor uses one circuit to do both addition and subtraction. The trick: to subtract B from A, we add A + (2's complement of B) = A + B̄ + 1.</p>
@@ -508,17 +536,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
         <div class="ns-body">
           <h4>Logic Micro-operations</h4>
           <p>Performed bit-by-bit on the bits of two registers. There are 16 possible logic operations for 2 variables. Most important ones:</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Operation</th><th>RTL</th><th>Use</th></tr>
             <tr><td>AND</td><td>R ← A ∧ B</td><td>Selective clear (masking)</td></tr>
             <tr><td>OR</td><td>R ← A ∨ B</td><td>Selective set</td></tr>
             <tr><td>XOR</td><td>R ← A ⊕ B</td><td>Selective complement</td></tr>
             <tr><td>NOT (Complement)</td><td>R ← Ā</td><td>Invert all bits</td></tr>
-          </table>
+          </table></div>
 
           <h4>Shift Micro-operations</h4>
           <p>Shift operations move the bits of a register left or right. Used in multiplication, division, and serial data transfer.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Type</th><th>Symbol</th><th>Description</th></tr>
             <tr><td>Logical Shift Left</td><td>shl R</td><td>Shift all bits left; 0 enters from right; MSB goes to serial output</td></tr>
             <tr><td>Logical Shift Right</td><td>shr R</td><td>Shift all bits right; 0 enters from left; LSB goes out</td></tr>
@@ -526,7 +554,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
             <tr><td>Circular Shift Right</td><td>cir R</td><td>LSB enters from left end</td></tr>
             <tr><td>Arithmetic Shift Left</td><td>ashl R</td><td>Same as logical shift left</td></tr>
             <tr><td>Arithmetic Shift Right</td><td>ashr R</td><td>Sign bit replicated; preserves sign for signed numbers</td></tr>
-          </table>
+          </table></div>
 
           <div class="diagram-wrap">
             <svg width="560" height="220" viewBox="0 0 560 220">
@@ -666,7 +694,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
         <div class="card-title">2.2 Memory Reference Instructions (MRI)</div>
         <div class="ns-body">
           <p>These instructions access memory. The address field points to a memory location.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Mnemonic</th><th>Opcode</th><th>Operation</th><th>RTL</th></tr>
             <tr><td>AND</td><td>000</td><td>AND memory to AC</td><td>AC ← AC ∧ M[EA]</td></tr>
             <tr><td>ADD</td><td>001</td><td>Add memory to AC</td><td>AC ← AC + M[EA], E←carry</td></tr>
@@ -675,7 +703,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
             <tr><td>BUN</td><td>100</td><td>Branch unconditionally</td><td>PC ← EA</td></tr>
             <tr><td>BSA</td><td>101</td><td>Branch and save return addr</td><td>M[EA]←PC, PC←EA+1</td></tr>
             <tr><td>ISZ</td><td>110</td><td>Increment and skip if zero</td><td>M[EA]←M[EA]+1; if M[EA]=0: PC←PC+1</td></tr>
-          </table>
+          </table></div>
           <div class="hbox amber"><strong>⚡ Memory: Direct vs Indirect Addressing</strong>
             <strong>Direct:</strong> The address in the instruction IS the memory address. EA = address field.<br>
             <strong>Indirect:</strong> The address in the instruction points to a memory location that CONTAINS the actual address. EA = M[address field].
@@ -930,13 +958,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15
             B, DEC 3 / Data: B = 3<br>
             C, DEC 0 / Data: Result stored here
           </div>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Aspect</th><th>Machine Language</th><th>Assembly Language</th></tr>
             <tr><td>Form</td><td>Binary (0011 0010...)</td><td>Mnemonics (LDA, ADD)</td></tr>
             <tr><td>Readability</td><td>Not readable</td><td>Human-readable</td></tr>
             <tr><td>Translation needed?</td><td>No (runs directly)</td><td>Yes (needs assembler)</td></tr>
             <tr><td>Portability</td><td>Machine-specific</td><td>Machine-specific</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
 
@@ -1064,13 +1092,13 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
         <div class="card-title">3.4 Pseudo Instructions</div>
         <div class="ns-body">
           <p>Pseudo instructions are <strong>assembler directives</strong> — they are not real machine instructions. They give directions TO the assembler, not to the CPU.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Pseudo Instruction</th><th>Meaning</th><th>Example</th></tr>
             <tr><td>ORG n</td><td>Set LC to n (origin)</td><td>ORG 100 → start at address 100</td></tr>
             <tr><td>END</td><td>End of program</td><td>Tells assembler to stop</td></tr>
             <tr><td>DEC n</td><td>Store decimal constant</td><td>A, DEC 83 → stores 83</td></tr>
             <tr><td>HEX n</td><td>Store hex constant</td><td>B, HEX 1A → stores 1A₁₆</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
     </div>
@@ -1087,13 +1115,13 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
         <div class="ns-body">
           <p>Instead of a single accumulator, a <strong>general register organization</strong> has multiple general-purpose registers (R1, R2, ..., R7) connected to the ALU via a common bus.</p>
           <p>A <strong>control word</strong> (14 bits) specifies the operation:</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Bits</th><th>Field</th><th>Meaning</th></tr>
             <tr><td>13-11</td><td>SELA (3 bits)</td><td>Select source register A</td></tr>
             <tr><td>10-8</td><td>SELB (3 bits)</td><td>Select source register B</td></tr>
             <tr><td>7-5</td><td>SELD (3 bits)</td><td>Select destination register D</td></tr>
             <tr><td>4-0</td><td>OPR (5 bits)</td><td>Select ALU operation (32 operations)</td></tr>
-          </table>
+          </table></div>
           <div class="hbox blue"><strong>Example: R1 ← R2 + R3</strong>
             SELA = R2 (source A), SELB = R3 (source B), SELD = R1 (destination), OPR = ADD
           </div>
@@ -1221,13 +1249,13 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
         <div class="card-title">4.3 Instruction Formats — Address Types</div>
         <div class="ns-body">
           <p>Instructions can have different numbers of address fields. This affects how many operands can be specified and how complex the hardware needs to be.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Format</th><th>Structure</th><th>Example</th><th>Stack needed?</th></tr>
             <tr><td>3-Address</td><td>OP D, S1, S2</td><td>ADD R1, R2, R3 (R1←R2+R3)</td><td>No</td></tr>
             <tr><td>2-Address</td><td>OP D, S</td><td>ADD R1, R2 (R1←R1+R2)</td><td>No</td></tr>
             <tr><td>1-Address</td><td>OP A</td><td>ADD A (AC←AC+M[A])</td><td>No (uses AC)</td></tr>
             <tr><td>0-Address</td><td>OP</td><td>ADD (pops 2, pushes result)</td><td>Yes</td></tr>
-          </table>
+          </table></div>
           <div class="hbox amber"><strong>0-Address (Stack Machine) Example: Evaluate X = (A+B)*(C+D)</strong>
             PUSH A, PUSH B, ADD → stack has (A+B)<br>
             PUSH C, PUSH D, ADD → stack has (A+B) and (C+D)<br>
@@ -1241,7 +1269,7 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
         <div class="card-title">4.4 Addressing Modes</div>
         <div class="ns-body">
           <p>Addressing modes define HOW the effective address (EA) of an operand is calculated from the instruction.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>#</th><th>Mode</th><th>EA Calculation</th><th>Example</th></tr>
             <tr><td>1</td><td><strong>Implied (Inherent)</strong></td><td>Operand is implied (no address needed)</td><td>CMA — complement AC. AC is implied.</td></tr>
             <tr><td>2</td><td><strong>Immediate</strong></td><td>Operand IS the address field</td><td>ADD #5 — add 5 directly (no memory access)</td></tr>
@@ -1253,7 +1281,7 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
             <tr><td>8</td><td><strong>Index</strong></td><td>EA = XR + Address field (XR = index register)</td><td>ADD 500(XR)</td></tr>
             <tr><td>9</td><td><strong>Base Register</strong></td><td>EA = BR + Address field</td><td>EA = Base + offset</td></tr>
             <tr><td>10</td><td><strong>Auto-increment</strong></td><td>EA = (R), then R←R+1</td><td>Useful for array traversal</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
     </div>
@@ -1281,14 +1309,14 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
           <p><strong>1. Logical Shift:</strong> In logical shift left (shl), bits move left; 0 is inserted at the LSB, and the MSB is lost. In logical shift right (shr), bits move right; 0 is inserted at the MSB, and the LSB is lost.</p>
           <p><strong>2. Circular Shift (Rotate):</strong> In circular shift left (cil), the MSB that is shifted out wraps around to the LSB position. In circular shift right (cir), the LSB wraps to the MSB. No bit is lost.</p>
           <p><strong>3. Arithmetic Shift:</strong> Arithmetic shift right (ashr) preserves the sign bit (MSB). The sign bit is copied into the new MSB instead of inserting 0. This is used for signed division by 2. Arithmetic shift left is same as logical shift left.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Operation</th><th>Symbol</th><th>RTL</th><th>Bit entering</th></tr>
             <tr><td>Logical Shift Left</td><td>shl R</td><td>R←R*2 (multiply by 2)</td><td>0 at LSB</td></tr>
             <tr><td>Logical Shift Right</td><td>shr R</td><td>R←R/2 (divide by 2)</td><td>0 at MSB</td></tr>
             <tr><td>Circular Left</td><td>cil R</td><td>MSB wraps to LSB</td><td>MSB → LSB</td></tr>
             <tr><td>Circular Right</td><td>cir R</td><td>LSB wraps to MSB</td><td>LSB → MSB</td></tr>
             <tr><td>Arithmetic Right</td><td>ashr R</td><td>Sign bit replicated</td><td>MSB copied</td></tr>
-          </table>
+          </table></div>
 
           <h4>4-bit Combinational Circuit Shifter</h4>
           <p>This circuit performs shift-left or shift-right using four 2-to-1 multiplexers and one selection input S.</p>
@@ -1399,11 +1427,11 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
           <p>A mode bit M controls the operation. Each bit of B passes through an XOR gate with M:</p>
           <p>When M=0: XOR(Bi, 0) = Bi → B unchanged → performs ADDITION (A+B). Carry-in to FA0 = 0.</p>
           <p>When M=1: XOR(Bi, 1) = Bi' → B complemented → combined with carry-in=1 (M itself) → performs SUBTRACTION (A-B = A + B̄ + 1).</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>M</th><th>Input to FA</th><th>Cin of FA0</th><th>Result</th></tr>
             <tr><td>0</td><td>Bi (unchanged)</td><td>0</td><td>A + B (Addition)</td></tr>
             <tr><td>1</td><td>Bi' (complemented)</td><td>1</td><td>A + B̄ + 1 = A - B (Subtraction)</td></tr>
-          </table>
+          </table></div>
           <p><strong>Overflow:</strong> If the result exceeds the range of 4 bits, an overflow (V) is detected: V = C4 XOR C3 (where C4 is final carry out and C3 is carry into last adder).</p>
           <p>The circuit diagram was shown above in the notes section (Fig 1.2). The 4 XOR gates handle the mode control, and 4 full adders chain their carry outputs to produce the final sum.</p>
         </div>
@@ -1423,13 +1451,13 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
           <p>A <strong>common bus system</strong> allows multiple registers to share a single set of wires (the bus) for data transfer. Instead of connecting every register directly to every other register (which would require n×(n-1) connections), only one bus is needed.</p>
           <h4>Design Using Multiplexers (MUX)</h4>
           <p>For 4 registers (A, B, C, D), each of n-bits wide: We need n multiplexers, one for each bit position. Each MUX is a 4-to-1 MUX that selects which register drives that bit line of the bus. Two selection bits S1 and S0 choose the register.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>S1</th><th>S0</th><th>Register on Bus</th></tr>
             <tr><td>0</td><td>0</td><td>Register A</td></tr>
             <tr><td>0</td><td>1</td><td>Register B</td></tr>
             <tr><td>1</td><td>0</td><td>Register C</td></tr>
             <tr><td>1</td><td>1</td><td>Register D</td></tr>
-          </table>
+          </table></div>
           <p><strong>Loading:</strong> Any register can receive data from the bus by enabling its load input. This is typically controlled by separate enable signals (LD for each register).</p>
           <p><strong>Three-state bus buffers</strong> are an alternative to MUX: each register has a three-state buffer on its output. Only the selected register's buffer is enabled (output = data), others are in high-impedance state (effectively disconnected). This avoids MUX hardware but requires careful control to prevent bus contention.</p>
           <div class="diagram-wrap">
@@ -1509,13 +1537,13 @@ SUB,   HEX 0      <span class="comment">/ This location stores return address</s
         <div class="ns-body">
           <p><strong>Register Transfer Language (RTL)</strong> is a symbolic notation used to describe the movement of data between registers and the operations performed on that data in digital systems. It provides a concise way to represent hardware behavior using mathematical notation.</p>
           <h4>Key RTL Symbols</h4>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Symbol</th><th>Meaning</th><th>Example</th></tr>
             <tr><td>←</td><td>Transfer (copy) data</td><td>R2 ← R1 (copy R1 to R2)</td></tr>
             <tr><td>M[AR]</td><td>Memory location at address AR</td><td>DR ← M[AR]</td></tr>
             <tr><td>R(H:L)</td><td>Part of register (high bit H to low bit L)</td><td>IR(11-0) ← address</td></tr>
             <tr><td>If P: R←R+1</td><td>Conditional transfer</td><td>Execute only if P=1</td></tr>
-          </table>
+          </table></div>
           <h4>Register Transfer Process</h4>
           <p>A register transfer requires: (1) a source register whose contents are placed on a bus, (2) a bus to carry the data, and (3) a destination register that loads the data when a control signal (clock pulse) activates it.</p>
           <p>The operation R1←R2 means: the output of R2 is connected to the input of R1. A timing control signal (usually a clock edge) triggers R1 to capture the value. R2 is not changed — its value is only READ.</p>
@@ -1661,7 +1689,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
         <div class="answer-label">✅ Detailed Answer</div>
         <div class="ns-body">
           <p><strong>Memory Reference Instructions (MRI)</strong> are instructions that access the main memory. They have a 3-bit opcode (bits 14-12) and a 12-bit address field. Bit 15 = 0 identifies them as MRI. There are 7 MRI instructions:</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Instruction</th><th>Opcode</th><th>RTL</th><th>Explanation</th></tr>
             <tr><td>AND</td><td>000</td><td>AC←AC ∧ M[EA]</td><td>Bitwise AND of AC with memory. Used for masking bits.</td></tr>
             <tr><td>ADD</td><td>001</td><td>AC←AC+M[EA], E←Cout</td><td>Adds memory content to AC. Carry goes to E register.</td></tr>
@@ -1670,7 +1698,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
             <tr><td>BUN</td><td>100</td><td>PC←EA</td><td>Unconditional jump to effective address.</td></tr>
             <tr><td>BSA</td><td>101</td><td>M[EA]←PC; PC←EA+1</td><td>Branch and save return address. Used for subroutine calls.</td></tr>
             <tr><td>ISZ</td><td>110</td><td>M[EA]←M[EA]+1; if M[EA]=0: PC←PC+1</td><td>Increment memory; skip next instruction if result is zero. Used for loop counters.</td></tr>
-          </table>
+          </table></div>
           <div class="hbox green"><strong>BSA Instruction Explained:</strong> BSA 200 means: M[200]←current PC (return address), then PC←201. This effectively calls a subroutine at address 200. The first word of the subroutine stores the return address. To return, execute BUN 200 in indirect mode: PC←M[200].</div>
         </div>
       </div>
@@ -1692,7 +1720,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
           <h4>Output Configuration</h4>
           <p>The display/printer is the output device. OUTR (8-bit Output Register) and FGO (1-bit Output Flag) manage it. Initially FGO=1 (device ready). CPU checks FGO; when FGO=1, it places data in OUTR using OUT instruction, then FGO is cleared to 0. When the device finishes printing, FGO is set back to 1.</p>
           <h4>I/O Instructions</h4>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Instruction</th><th>Operation</th><th>Use</th></tr>
             <tr><td>INP</td><td>AC(0-7) ← INPR; FGI ← 0</td><td>Read input character</td></tr>
             <tr><td>OUT</td><td>OUTR ← AC(0-7); FGO ← 0</td><td>Output character</td></tr>
@@ -1700,7 +1728,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
             <tr><td>SKO</td><td>If FGO=1: PC←PC+1</td><td>Skip if output ready</td></tr>
             <tr><td>ION</td><td>IEN ← 1</td><td>Enable interrupt</td></tr>
             <tr><td>IOF</td><td>IEN ← 0</td><td>Disable interrupt</td></tr>
-          </table>
+          </table></div>
           <p>See I/O block diagram in Fig 2.3 in Chapter 2 notes.</p>
         </div>
       </div>
@@ -1718,7 +1746,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
         <div class="ns-body">
           <p>The <strong>Accumulator (AC)</strong> is the central register of the basic computer. It is 16 bits wide and holds operands and results of most operations. The accumulator logic determines what gets loaded into AC on each clock cycle.</p>
           <h4>Operations and their control signals</h4>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Operation</th><th>RTL</th><th>Condition</th></tr>
             <tr><td>Load from DR</td><td>AC←DR</td><td>LDA instruction</td></tr>
             <tr><td>Add DR to AC</td><td>AC←AC+DR</td><td>ADD instruction</td></tr>
@@ -1728,7 +1756,7 @@ T2: PC ← PC+1, IEN ← 0, R←0, SC←0
             <tr><td>Shift left AC</td><td>AC←shl(AC)</td><td>CIL instruction</td></tr>
             <tr><td>Shift right AC</td><td>AC←shr(AC)</td><td>CIR instruction</td></tr>
             <tr><td>Load from INPR</td><td>AC(0-7)←INPR</td><td>INP instruction</td></tr>
-          </table>
+          </table></div>
           <h4>Hardware Design</h4>
           <p>The accumulator register has a parallel-load capability controlled by LD(AC) signal. It also has clear (CLR(AC)) and increment (INR(AC)) inputs. The input to AC comes from an OR gate that selects between ALU output, INPR, and other sources based on the current operation's control signals.</p>
           <p>The adder-and-logic unit (ADDER AND LOGIC) receives AC and DR, performs the operation, and feeds result back to AC input. An 8:1 MUX or equivalent combinational logic determines which operation's result is loaded into AC.</p>
@@ -1860,13 +1888,13 @@ SP ← SP + 1       <span class="comment">// Increment SP</span></div>
         <div class="ns-body">
           <p><strong>Pseudo instructions</strong> (also called assembler directives) are instructions written in assembly language but they do NOT generate machine code. Instead, they give instructions to the ASSEMBLER itself about how to assemble the program.</p>
           <p>They are "pseudo" because they look like instructions but are not executed by the CPU — they guide the translation process.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Pseudo Instruction</th><th>Purpose</th><th>Example</th><th>Effect</th></tr>
             <tr><td>ORG n</td><td>Set origin/starting address</td><td>ORG 100</td><td>LC ← 100; next instruction placed at address 100</td></tr>
             <tr><td>END</td><td>Mark end of assembly program</td><td>END</td><td>Assembler stops processing. Must be last line.</td></tr>
             <tr><td>DEC n</td><td>Store a decimal number as data</td><td>NUM, DEC -23</td><td>Stores -23 in 2's complement at current LC</td></tr>
             <tr><td>HEX n</td><td>Store a hexadecimal value</td><td>ADDR, HEX 1FF</td><td>Stores 0x1FF (511) at current LC</td></tr>
-          </table>
+          </table></div>
           <div class="code-block"><span class="comment">/ Complete program showing pseudo instructions</span>
          ORG  100        <span class="comment">/ Start at address 100</span>
 START,   LDA  A         <span class="comment">/ Load A into AC</span>
@@ -1962,7 +1990,7 @@ COMP,  HEX  0          <span class="comment">/ This stores the return address (f
 
           <h4>7. Relative Addressing</h4>
           <p>EA = PC + address field (signed offset). Used in branch instructions. Makes code position-independent (relocatable). The offset specifies how far to jump from current PC.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Mode</th><th>EA Formula</th><th>Memory Accesses</th><th>Best Used For</th></tr>
             <tr><td>Implied</td><td>N/A (implicit)</td><td>0</td><td>Single-register ops</td></tr>
             <tr><td>Immediate</td><td>Operand = address field</td><td>0</td><td>Small constants</td></tr>
@@ -1971,7 +1999,7 @@ COMP,  HEX  0          <span class="comment">/ This stores the return address (f
             <tr><td>Register</td><td>EA = Register</td><td>0</td><td>Fast temp storage</td></tr>
             <tr><td>Indexed</td><td>EA = XR + address field</td><td>1</td><td>Arrays</td></tr>
             <tr><td>Relative</td><td>EA = PC + address field</td><td>1</td><td>Branches, relocatable code</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
     </div>
@@ -2038,13 +2066,13 @@ FULL ← 0            <span class="comment">// Stack is not full</span></div>
           <h4>Zero-Address Instructions (Stack Machine)</h4>
           <p>Format: <code>OP</code> — No address field. All operands are on the stack. Push constants/variables onto stack; operations pop the top two values and push the result.</p>
           <p>Evaluate X = (A+B)*(C+D):<br><code>PUSH A, PUSH B, ADD, PUSH C, PUSH D, ADD, MUL, POP X</code> — 8 instructions.</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Type</th><th>Instruction Length</th><th>Code Length</th><th>Example Architecture</th></tr>
             <tr><td>3-Address</td><td>Long (3 addresses)</td><td>Short</td><td>RISC machines</td></tr>
             <tr><td>2-Address</td><td>Medium</td><td>Medium</td><td>x86, most CISC</td></tr>
             <tr><td>1-Address</td><td>Short</td><td>Long</td><td>Basic computer, 8085</td></tr>
             <tr><td>0-Address</td><td>Very short</td><td>Longest</td><td>Java bytecode, HP calculators</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
     </div>
@@ -2064,15 +2092,15 @@ FULL ← 0            <span class="comment">// Stack is not full</span></div>
           <p>The organization uses <strong>three internal buses</strong>: Bus A (source A), Bus B (source B), and Bus D (destination). The ALU receives inputs from Bus A and Bus B and outputs to Bus D.</p>
           <h4>The 14-bit Control Word</h4>
           <p>Each ALU operation is specified by a 14-bit control word:</p>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>Field</th><th>Bits</th><th>Description</th><th>Values</th></tr>
             <tr><td>SELA</td><td>13-11 (3 bits)</td><td>Source register A for Bus A</td><td>000=input, 001=R1...111=R7</td></tr>
             <tr><td>SELB</td><td>10-8 (3 bits)</td><td>Source register B for Bus B</td><td>Same encoding as SELA</td></tr>
             <tr><td>SELD</td><td>7-5 (3 bits)</td><td>Destination register for Bus D</td><td>Same; 000=no destination</td></tr>
             <tr><td>OPR</td><td>4-0 (5 bits)</td><td>ALU operation code</td><td>32 possible operations</td></tr>
-          </table>
+          </table></div>
           <h4>Selected OPR codes</h4>
-          <table class="tbl">
+          <div class="tbl-wrap"><table class="tbl">
             <tr><th>OPR</th><th>Operation</th><th>RTL</th></tr>
             <tr><td>00000</td><td>TSFA (Transfer A)</td><td>D←A</td></tr>
             <tr><td>00001</td><td>INC</td><td>D←A+1</td></tr>
@@ -2084,7 +2112,7 @@ FULL ← 0            <span class="comment">// Stack is not full</span></div>
             <tr><td>01110</td><td>CMA</td><td>D←A'</td></tr>
             <tr><td>10000</td><td>SHR</td><td>D←shr A</td></tr>
             <tr><td>11000</td><td>SHL</td><td>D←shl A</td></tr>
-          </table>
+          </table></div>
           <p>Example control word for R1 ← R2 + R3: SELA=010(R2), SELB=011(R3), SELD=001(R1), OPR=00010(ADD) → Control word = 010 011 001 00010 = 0100 1100 1000 10</p>
         </div>
       </div>
